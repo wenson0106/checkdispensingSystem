@@ -1,0 +1,1054 @@
+﻿@model InPtUddWork.ViewModels.UddDataAndDrug
+
+@{
+    Layout = null;
+}
+
+<!--警 黃底紅字/-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>檢藥</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <link href="../Content/template/style.css" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <div class="header_div">
+            <img src="~/image/back.png" class="back_img" />
+            <p class="header_title">住院患者UD調劑總表</p>
+            <div style="float:right;width:125px;display:flex;">
+                <div style="width: 68px; border: 1px solid white; display: flex;">
+                    <img src="~/image/line.png" id="line_btn" class="format_btn" />
+                    <img src="~/image/block.png" id="block_btn" class="format_btn" />
+                </div>
+                <img src="~/image/menu.png" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="float:right;width:35px;margin-left:10px;" />
+                <div class="dropdown">
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width: 200px; font-size: 18px; font-weight: 500;">
+                        <li><a class="dropdown-item" href="#">回首頁</a></li>
+                        <li><a class="dropdown-item" href="SelectNursingStation">護理站</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        @{
+            ViewBag.Title = "CheckMed";
+            var date = ViewBag.Date.Split(' ');
+            var nowDate = date[0].Split('-');
+            int nowYear = int.Parse(nowDate[0]);
+            int nowMonth = int.Parse(nowDate[1]);
+
+            var patientDate = Model.uddData.headler.Birthday.Split('/');
+            int patientYear = int.Parse(patientDate[0]);
+            int patientMonth = int.Parse(patientDate[1]);
+            int Year;
+            int Month;
+            if (nowMonth > patientMonth)
+            {
+                Year = nowYear - patientYear;
+                Month = nowMonth - patientMonth;
+            }
+            else
+            {
+                Year = nowYear - patientYear - 1;
+                Month = 12 - patientMonth + nowMonth;
+            }
+        }
+
+        <div>
+            <div class="patient_info_main">
+                <div class="patient_info_main_div">
+                    <p>患者&nbsp;:&nbsp; @Model.uddData.headler.ChartNo &nbsp; @Model.uddData.headler.PtName &nbsp; @Model.uddData.headler.Sex &nbsp; @Model.uddData.headler.Birthday ( @Year 歲 @Month 個月  ) &nbsp;體重&nbsp;:&nbsp; @Model.uddData.headler.Weight</p>
+                </div>
+                <div class="patient_info_sec">
+                    <p style="display: inline-block;">床號&nbsp;:&nbsp; @Model.uddData.headler.Roombed &nbsp;科別&nbsp;:&nbsp; @Model.uddData.headler.Division &nbsp;主治醫師&nbsp;:&nbsp; @Model.uddData.headler.Doctor &nbsp;</p>
+                    <div style=" float:right;position:relative">
+                        <div style=" display: flex;">
+                            <div id="prn_btn" class="header_div_button">
+                                <p>PRN</p>
+                            </div>
+                            <div id="33block_btn" class="header_div_button">
+                                <p>九宮格</p>
+                            </div>
+                        </div>
+                        <div style="position: absolute; top: 35px; right: 10px; display: flex; z-index: 1000; align-items: flex-start; ">
+                            <div class="prn">
+                                <div class="block_header">
+                                    <p>prn</p>
+                                </div>
+                                <div class="block_content">
+                                    <div></div>
+                                </div>
+                            </div>
+                            <div class="_33block">
+                                <div class="block_header">
+                                    <p>九宮格</p>
+                                </div>
+                                <div class="block_content">
+                                    <table>
+                                        <tr>
+                                            <td><p>ALT</p></td>
+                                            <td><p></p></td>
+                                            <td><p></p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p></p></td>
+                                            <td><p></p></td>
+                                            <td><p></p></td>
+                                        </tr>
+                                        <tr>
+                                            <td><p></p></td>
+                                            <td><p></p></td>
+                                            <td><p></p></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="patient_info_sec_open expand">
+                <p class="p_in_sec_open">主診斷&nbsp;:&nbsp; @Model.uddData.headler.ChtName</p>
+                <p class="p_in_sec_open" style="color: #b70202;">
+                    @{ if (Model.uddData.headler.Allergy != "") { Write("藥物過敏 : " + Model.uddData.headler.Allergy); }
+                    }
+                </p>
+                <p class="p_in_sec_open">
+                    @{ if (Model.uddData.headler.LabReport != "") { Write("檢查報告 : " + Model.uddData.headler.LabReport); }
+                    }
+                </p>
+                <p class="p_in_sec_open">
+                    @{ if (Model.uddData.headler.DoseModification != "") { Write("劑量調整 : " + Model.uddData.headler.DoseModification); }
+
+
+                    }
+                </p>
+                <div class="p_in_sec_open">
+                    @{
+                        var n = Model.uddData.interaction.Count();
+                        int i = 0;
+                        foreach (var interatction in Model.uddData.interaction)
+                        {
+                            if (interatction.Significance != 0)
+                            {
+                                if (i == 0)
+                                {
+                                    <p style="display:inline">交互作用&nbsp;:&nbsp;</p>
+                                }
+                                else
+                                {
+                                    <br />
+                                }
+                                i++;
+                                <p class="p_interatction interatction_@i" value="@i" style="display:inline">
+                                    @interatction.ItemName1 &nbsp; @interatction.ItemName2 &nbsp; [&nbsp;級數&nbsp;:&nbsp; @interatction.Significance &nbsp;]
+                                </p>
+                                <div class="interatction_hidden interatction_detail_@i">
+                                    <p>[&nbsp;機轉&nbsp;:&nbsp; @interatction.Mechanism &nbsp;]</p>
+                                    <p>[&nbsp;管理&nbsp;:&nbsp; @interatction.Management &nbsp;]</p>
+                                </div>
+
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            <div id="img_center_div"><img src="../../image/展開.png" class="img_open img_expand"></div>
+        </div>
+    </header>
+    <div class="body_content">
+        @{int white_count = 0; string bgcolor; int med_n = 0; string isChecked;}
+
+        <form id="go" method="get">
+            <input type="hidden" name="bedid" id="bedid" value="" />
+        </form>
+        <form id="checked" method="post">
+            <input type="hidden" value="model.headler.Roombed" name="roomBed" />
+            <div class="white_space" style="margin-bottom:5px;"></div>
+
+            <div class="row line_style" style="margin: 0; padding: 0;">
+                @foreach (var item in Model.uddData.detail)
+                {
+                    med_n++;
+                    white_count++;
+                    bgcolor = "#ddd";
+                    /*
+                    if (@item.background_color == 1)
+                    {
+                        if (white_count % 2 == 1) { bgcolor = "white"; }
+                        else { bgcolor = "#ddd"; }
+                    }
+                    else if (@item.background_color == 2)
+                    {
+                        bgcolor = "#a4f9a4";
+                    }
+                    else if (@item.background_color == 3)
+                    {
+                        bgcolor = "#ffffa2";
+                    }
+                    else
+                    {
+                        bgcolor = "#f5afaf";
+                    }*/
+                    if (@item.IsSelf == "自費")
+                    {
+                        bgcolor = "#ffffa2";
+                    }
+                    else
+                    {
+                        bgcolor = "#baffba";
+                    }
+
+                    if (item.IsChecked == "" || item.IsChecked == "false")
+                    {
+                        isChecked = "false";
+                    }
+                    else
+                    {
+                        isChecked = "true";
+                    }
+                    <input type="hidden" id="isChecked_med_@med_n" name="_checked" value="@isChecked" class="isChecked" />
+                    <div class="body_straight col-12" style="margin: 2px 0; padding: 0; width: 100%; position: relative; overflow-x: hidden; ">
+                        <div class="swipe_box" style="width: calc(100% + 1000px); display: flex; position: relative; ">
+                            <div style="width:500px;display:inline;visibility:hidden;"></div>
+                            <div class="med_@med_n med_content @{ if (isChecked == "true") { Write("green_border"); } } " value="med_@med_n">
+                                <div class="mark_content">
+                                    <div class="mark_content_bottom row" style="display:flex;">
+                                        @if (item.Remark != "")
+                                        {
+                                            <div class="col-4 mark_items remark" style="border-radius: 28px; background-color: #ddd; color: green "><p style="margin-top: 10px; font-size: 12px;">備註</p></div>
+                                        }
+                                        @if (item.Remark != "")
+                                        {
+                                            <div class="col-4 mark_items" style="background-color: #313232; color: white;"><p>貴</p></div>
+                                        }
+                                        @if (item.Remark != "")
+                                        {
+                                            <div class="col-4 mark_items" style="background-color: #2a97f7; color: white;"><p>冰</p></div>
+                                        }
+                                        @if (item.Remark != "")
+                                        {
+                                            <div class="col-4 mark_items" style="background-color: #ffd522; color: #b51900;"><p>警</p></div>
+                                        }
+                                        @if (item.Remark != "")
+                                        {
+                                            <div class="col-4 mark_items" style="background-color: #ef3c3c; color: #fff35d;"><p>管</p></div>
+                                        }
+                                        @if (item.Remark != "")
+                                        {
+                                            <div class="col-4 mark_items" style="background-color: #eb3ff1; color: white;"><p>DC</p></div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="med_content_right">
+                                    <div class="med_content_inside">
+                                        <div>
+                                            <p class="med_name">藥品名稱&nbsp;:&nbsp; @item.ItemName </p>
+                                            <p class="generic_name">學名&nbsp;:&nbsp; @item.GenericName</p>
+                                        </div>
+                                        <div class="left_bottom">
+                                            <div class="med_detail">
+                                                <div class="row_div">
+                                                    <div class="col-4_div detail">
+                                                        <p>劑量&nbsp;:&nbsp;</p> <p class="items">@item.Dose</p>
+                                                        <p>頻率&nbsp;:&nbsp;</p> <p class="items"> @item.Usage</p>
+                                                        <p style="color: #0951bd">總量&nbsp;:&nbsp;</p> <p class="items"> @item.TotQty</p>
+                                                        <p>單位&nbsp;:&nbsp;</p> <p class="items"> @item.DoseUnit</p>
+                                                        <p>途徑&nbsp;:&nbsp;</p> <p class="items"> @item.Way</p>
+                                                        <!--<p>磨粉&nbsp;:&nbsp;</p> <p class="items"> item.IsMill</p>-->
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="med_time"><p>開始時間&nbsp;:&nbsp; @item.StartTime&nbsp;&nbsp;&nbsp;&nbsp;</p><p>結束時間&nbsp;:&nbsp; @item.StartTime</p></div>
+                                                <div></div>
+                                            </div>
+                                            <!---->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="img">
+                                    <div class="medImg_div"><img src="~/image/QRcode.png" class="med_img" value="@item.ItemName"></div>
+                                </div>
+
+                            </div>
+                            <div style="width: 500px; visibility: hidden;"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+            <!--block-->
+            <div class="row block_style" style="margin:0;padding:0;">
+                @foreach (var item in Model.uddData.detail)
+                {
+                    med_n++;
+                    white_count++;
+                    bgcolor = "#ddd";
+                    /*
+                    if (@item.background_color == 1)
+                    {
+                        if (white_count % 2 == 1) { bgcolor = "white"; }
+                        else { bgcolor = "#ddd"; }
+                    }
+                    else if (@item.background_color == 2)
+                    {
+                        bgcolor = "#a4f9a4";
+                    }
+                    else if (@item.background_color == 3)
+                    {
+                        bgcolor = "#ffffa2";
+                    }
+                    else
+                    {
+                        bgcolor = "#f5afaf";
+                    }*/
+                    if (@item.IsSelf == "自費")
+                    {
+                        bgcolor = "#ffffa2";
+                    }
+                    else
+                    {
+                        bgcolor = "#baffba";
+                    }
+
+                    if (item.IsChecked == "" || item.IsChecked == "false")
+                    {
+                        isChecked = "false";
+                    }
+                    else
+                    {
+                        isChecked = "true";
+                    }
+                    <input type="hidden" id="" name="_checked" value="@isChecked" class="isChecked" />
+                    <div class="body_block col-6" style="margin: 2px 0; padding: 0;position: relative; overflow-x: hidden; ">
+                        <div class="swipe_box" style="width: calc(100% + 1000px); display: flex; position: relative; ">
+                            <div style="width:495px;display:inline;visibility:hidden;margin-right:5px;"></div>
+                            <div class="med_@med_n med_content_block @{ if (isChecked == "true") { Write("green_border"); } } " value="med_@med_n">
+
+                                <div class="med_content_right_block">
+                                    <div class="med_content_inside_block">
+                                        <div style="padding: 0 5px;padding-top:3px;">
+                                            <p class="med_name">@item.ItemName </p>
+                                            <p class="generic_name">學名&nbsp;:&nbsp; @item.GenericName</p>
+                                        </div>
+                                        <div class="left_bottom">
+                                            <div class="med_detail">
+                                                <div class="row_div" style="padding: 0 5px;">
+                                                    <div class="col-4_div detail">
+                                                        <p>劑量&nbsp;:&nbsp;</p> <p class="items">@item.Dose</p>
+                                                        <p class="items"> @item.Usage</p>
+                                                        <p style="color: #0951bd">總量&nbsp;:&nbsp;</p> <p class="items"> @item.TotQty</p>
+                                                        <p>單位&nbsp;:&nbsp;</p> <p class="items"> @item.DoseUnit</p>
+                                                        <p class="items"> @item.Way</p>
+                                                        <!--<p>磨粉&nbsp;:&nbsp;</p> <p class="items"> item.IsMill</p>-->
+
+                                                    </div>
+
+                                                </div>
+                                                <div style="display:flex;width:100%;">
+                                                    <div class="med_time_block">
+                                                        <p class="med_time_p" style="padding: 0 5px;">開始時間&nbsp;:&nbsp; @item.StartTime&nbsp;&nbsp;&nbsp;&nbsp;</p><p class="med_time_p" style="padding: 0 5px;">結束時間&nbsp;:&nbsp; @item.StartTime</p>
+                                                        <div style="width: 100%;height: 35px;border-top: 1px solid black;border-right: 1px solid black;">
+                                                            <div class="mark_content_bottom row">
+                                                                <div class="col-2" style="padding:0 5px;">
+                                                                    @if (item.Remark != "")
+                                                                    {
+                                                                        <div class="mark_items_block remark" style="border-radius: 28px; background-color: #ddd; color: green "><p style="font-size: 16px;">備註</p></div>
+                                                                    }
+                                                                </div>
+                                                                <div class="col-2" style="padding:0 5px;">
+                                                                    @if (item.Remark != "")
+                                                                    {
+                                                                        <div class="mark_items_block" style="background-color: #313232; color: white;"><p>貴</p></div>
+                                                                    }
+                                                                </div>
+                                                                <div class="col-2" style="padding:0 5px;">
+                                                                    @if (item.Remark != "")
+                                                                    {
+                                                                        <div class="mark_items_block" style="background-color: #2a97f7; color: white;"><p>冰</p></div>
+                                                                    }
+                                                                </div>
+                                                                <div class="col-2" style="padding:0 5px;">
+                                                                    @if (item.Remark != "")
+                                                                    {
+                                                                        <div class="mark_items_block" style="background-color: #ffd522; color: #b51900;"><p>警</p></div>
+                                                                    }
+                                                                </div>
+                                                                <div class="col-2" style="padding:0 5px;">
+                                                                    @if (item.Remark != "")
+                                                                    {
+                                                                        <div class="mark_items_block" style="background-color: #ef3c3c; color: #fff35d;"><p>管</p></div>
+                                                                    }
+                                                                </div>
+                                                                <div class="col-2" style="padding:0 5px;">
+                                                                    @if (item.Remark != "")
+                                                                    {
+                                                                        <div class="mark_items_block" style="background-color: #eb3ff1; color: white;"><p>DC</p></div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="img_block">
+                                                        <div class="medImg_div"><img src="~/image/QRcode.png" class="med_img" value="@item.ItemName"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!---->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width: 495px; visibility: hidden;margin-right:5px;"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+    <div class="footer_white_space"></div>
+    <div class="footer_div">
+        <div class="btn_outside_div">
+            @if (ViewBag.lastPId != "")
+            {
+                <div id="last" class="check_finished div_button" style="background-color:#ddd"><p class="check_finished_p">上一床</p></div>
+            }
+        </div>
+        <div class="btn_outside_div">
+            <div id="" class="check_finished div_button" style="background-color:#ddd"><p class="check_finished_p">出院</p></div>
+        </div>
+        <div class="btn_outside_div">
+            <div id="all_check" class="check_finished div_button"><p class="check_finished_p">一鍵完成</p></div>
+        </div>
+        <div class="btn_outside_div">
+            <div id="check_finished" class=" check_finished div_button" style="background-color:#ddd"><p class="check_finished_p">儲存</p></div>
+        </div>
+        <div class="btn_outside_div">
+            @if (ViewBag.nextPId != "")
+            {
+                <div id="next" class="check_finished div_button" style="background-color:#ddd"><p class="check_finished_p">下一床</p></div>
+            }
+
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <div class="big_img_back">
+        <div class="big_img_front">
+            <div class="modal_content">
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>廠商名稱:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="Manufactory" class="drugInfo" style="color:blue;"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>藥品英文名稱:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="TradeName" class="drugInfo" style="color:blue;"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>藥品中文名稱:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="ChineseName" class="drugInfo" style="color:blue;"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>院內代碼:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="ItemCode" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>主成分及含量:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="GenericName" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>適應症(藥袋列印):</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="IndicationsA1" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>適應症:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="IndicationsA2" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>用法用量:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="AdultDosing" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>副作用(藥袋列印):</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="AdverseEffectsA1" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>副作用:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="AdverseEffectsA2" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>禁忌:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="Contraindication" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>其他注意事項:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="Precautions" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>健保規範:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="NhiNorm" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>配置方法:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="Dispose" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>儲存方法:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="Storage" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>懷孕分級:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="Pregnancy" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>警訊藥品:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="HighAlert" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>輸液速率:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="Injection" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_column">
+                    <div class="column_left">
+                        <p>開封後有效時數:</p>
+                    </div>
+                    <div class="column_right">
+                        <p id="ExpireHourDesc" class="drugInfo"></p>
+                    </div>
+                </div>
+                <div class="modal_content_bottom">
+                    <div class="modal_content_bottom_left">
+                        <p>藥品圖示:</p>
+                        <img src="" id="DrugImg" class="drugImg" />
+                    </div>
+                    <div class="modal_content_bottom_right">
+                        <p>包裝圖示:</p>
+                        <img src="" id="DrugPkgImg" class="drugImg" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
+<script>
+    $("#line_btn").click(function () {
+        $(".block_style").addClass("display_none");
+        $(".line_style").removeClass("display_none");
+    })
+    $("#block_btn").click(function () {
+        $(".block_style").removeClass("display_none");
+        $(".line_style").addClass("display_none");
+
+    })
+    $(".med_img").click(function () {
+        $(".big_img_back").fadeIn();
+        var Bwidth = $(".big_img_back").width() * 0.04;
+        var Bheight = $(".big_img_back").height() * 0.04;
+        $(".big_img_front").css({ "top": Bheight, "left": Bwidth });
+        console.log($(this).attr("value"));
+        ChangeModalInfo($(this).attr("value"));
+        /*if ($(this).width() / $(".big_img_front").width() > $(this).height() / $(".big_img_front").height()) {
+            $("#big_img").css("width", "100%");
+        } else {
+            $("#big_img").css("height", "100%");
+        }*/
+        event.stopPropagation();
+    })
+    $(".p_interatction").click(function () {
+        var i = $(".p_interatction").attr("value");
+        if ($(".interatction_detail_" + i).css("display") == "none") {
+            $(".interatction_detail_" + i).css("display", "block");
+        } else {
+            $(".interatction_detail_" + i).css("display", "none");
+        }
+        resize_white_block();
+    })
+    $("#last").click(function () {
+        $("#bedid").val("@ViewBag.lastPId");
+        $("#go").submit();
+    })
+    $("#next").click(function () {
+        $("#bedid").val("@ViewBag.nextPId");
+        $("#go").submit();
+    })
+
+    $("#img_center_div").click(function () {
+        $(".patient_info_sec_open").toggle();
+        if ($(".img_expand").hasClass("img_open")) {
+            $(".img_expand").removeClass("img_open");
+        } else {
+            $(".img_expand").addClass("img_open");
+        }
+        resize_white_block();
+
+    })
+
+    $(window).resize(function () {
+        /*var width = $(this).width();
+        var i = 0;
+        alert(width);
+        if (width >= 960) {
+            $(".med_content").each(function(){
+                i++;
+                if ($(".med_" + i + ".med_content").hasClass("green_border")) {
+                    $(".med_" + i + ".med_content_horiz").addClass("green_border");
+                } else {
+                    $(".med_" + i + ".med_content_horiz").removeClass("green_border");
+                }
+                if ($(".med_" + i + ".med_content").hasClass("red_border")) {
+                    $(".med_" + i + ".med_content_horiz").addClass("red_border");
+                } else {
+                    $(".med_" + i + ".med_content_horiz").removeClass("red_border");
+                }
+            })
+        } else {
+            $(".med_content_horiz").each(function () {
+                i++;
+                if ($(".med_" + i + ".med_content_horiz").hasClass("green_border")) {
+                    $(".med_" + i + ".med_content").addClass("green_border");
+                } else {
+                    $(".med_" + i + ".med_content").removeClass("green_border");
+                }
+                if ($(".med_" + i + ".med_content_horiz").hasClass("red_border")) {
+                    $(".med_" + i + ".med_content").addClass("red_border");
+                } else {
+                    $(".med_" + i + ".med_content").removeClass("red_border");
+                }
+            })
+        }*/
+        resize_white_block();
+    });
+
+    $(function () {
+        resize_white_block();
+        $("._33block").css("display", "block");
+        $(".body_straight,.body_block").delay("slow").scrollLeft(500);
+        $(".block_style").addClass("display_none");
+    });
+
+    $(".big_img_back").click(function () {
+        $(this).fadeOut();
+
+    })
+    $(".back_img").click(function () {
+        window.location.href = "SelectPatient";
+    })
+
+    $("#all_check").click(function () {
+        $(".med_content,.med_content_horiz").addClass('green_border');
+        $(".isChecked").val("true");
+        //$(".red_border").removeClass('green_border');
+    })
+
+    /*
+    $("#check_finished").click(function () {
+        $("#checked").submit();
+    })*/
+    /*$(".modify").click(function () {
+        if ($(this).hasClass("modify_false")) {
+            $(".header_div").css("background-color", "darkred");
+            $(".footer_div").css("background-color", "darkred");
+            $(this).removeClass("modify_false");
+            $(this).addClass("modify_true");
+            $(".modify_p").text("確認");
+        } else {
+            $(".header_div").css("background-color", "#31662e");
+            $(".footer_div").css("background-color", "#31662e");
+            $(this).removeClass("modify_true");
+            $(this).addClass("modify_false");
+            $(".modify_p").text("更正");
+        }
+    })*/
+
+    $('body').on('touchstart', function (event) {
+        x = event.targetTouches[0].pageX;
+        y = event.targetTouches[0].pageY;
+        swipeX = true;
+        swipeY = true;
+    })
+
+    $('.med_content,.med_content_block').on('touchmove', function (event) {
+        x1 = event.targetTouches[0].pageX;
+        y1 = event.targetTouches[0].pageY;
+        if (swipeX && Math.abs(x1 - x) - Math.abs(y1 - y) > 0) {
+            event.stopPropagation();
+            if (x1 - x > 80 && (!$(this).hasClass("green_border"))) {
+                $(this).parent(".swipe_box").addClass("swiperight");
+                $(this).parent(".swipe_box").addClass("swipe_visible");
+                $(this).addClass("green_border");
+                setTimeout(() => {
+                    $(this).parent(".swipe_box").removeClass("swiperight");;
+                    setTimeout(() => {
+                        $(this).parent(".swipe_box").removeClass("swipe_visible");
+                    }, 100);
+                }, 150);
+
+            }
+            if (x - x1 > 80 && $(this).hasClass("green_border")) {
+                $(this).parent(".swipe_box").addClass("swipeleft");
+                $(this).parent(".swipe_box").addClass("swipe_visible");
+                $(this).removeClass("green_border");
+                setTimeout(() => {
+                    $(this).parent(".swipe_box").removeClass("swipeleft");
+                    setTimeout(() => {
+                        $(this).parent(".swipe_box").removeClass("swipe_visible");
+                    }, 100);
+                }, 150);
+            }
+            swipeY = false;
+        }
+        if (swipeY && Math.abs(x1 - x) - Math.abs(y1 - y) < 0) {
+            swipeX = false;
+        }
+    })
+    $("#prn_btn").click(function () {
+        $(".prn").toggle();
+    })
+    $("#33block_btn").click(function () {
+        $("._33block").toggle();
+    })
+    function resize_white_block() {
+        var prn = $(".prn").css("display");
+        var _33block = $("._33block").css("display");
+        $(".prn").css("display", "none");
+        $("._33block").css("display", "none");
+        var h = $("header").height().toString();
+        $(".white_space").css("height", h + "px");
+        $("._33block").css("display", _33block);
+        $(".prn").css("display", prn);
+    }
+
+    function ChangeModalInfo(name) {
+        if (name == "@Model.drugSet.TradeName") {
+            console.log(name);
+            $(".drugInfo").each(function () {
+                var id = $(this).attr("id");
+                var content = "";
+                switch (id) {
+                    case 'Manufactory': {
+                        content = "@Model.drugSet.Manufactory";
+                        break;
+                    }
+                    case 'TradeName': {
+                        content = "@Model.drugSet.TradeName";
+                        break;
+                    }
+                    case 'ChineseName': {
+                        content = "@Model.drugSet.ChineseName";
+                        break;
+                    }
+                    case 'GenericName': {
+                        content = "@Model.drugSet.GenericName";
+                        break;
+                    }
+                    case 'LicenseNumber': {
+                        content = "@Model.drugSet.LicenseNumber";
+                        break;
+                    }
+                    case 'ItemCode': {
+                        content = "@Model.drugSet.ItemCode";
+                        break;
+                    }
+                    case 'Form': {
+                        content = @Model.drugSet.Form;
+                        break;
+                    }
+                    case 'GenericCode': {
+                        content = "@Model.drugSet.GenericCode";
+                        break;
+                    }
+                    case 'IndicationsA1': {
+                        content = "@Model.drugSet.IndicationsA1";
+                        break;
+                    }
+                    case 'IndicationsA2': {
+                        content = "@Model.drugSet.IndicationsA2";
+                        break;
+                    }
+                    case 'AdultDosing': {
+                        content = "@Model.drugSet.AdultDosing";
+                        break;
+                    }
+                    case 'AdverseEffectsA1': {
+                        content = "@Model.drugSet.AdverseEffectsA1";
+                        break;
+                    }
+                    case 'AdverseEffectsA2': {
+                        content = "@Model.drugSet.AdverseEffectsA2";
+                        break;
+                    }
+                    case 'Contraindication': {
+                        content = "@Model.drugSet.Contraindication";
+                        break;
+                    }
+                    case 'Precautions': {
+                        content = "@Model.drugSet.Precautions";
+                        break;
+                    }
+                    case 'Dispose': {
+                        content = "@Model.drugSet.Dispose";
+                        break;
+                    }
+                    case 'Storage': {
+                        content = "@Model.drugSet.Storage";
+                        break;
+                    }
+                    case 'HighAlert': {
+                        if (@Model.drugSet.HighAlert== 0) {
+                            content = "非高警訊藥品";
+                        } else if (@Model.drugSet.HighAlert== 1) {
+                            content = "高警訊藥品";
+                        } else if (@Model.drugSet.HighAlert== 2) {
+                            content = "化療注射劑";
+                        } else if (@Model.drugSet.HighAlert== 3) {
+                            content = "兒童專用藥";
+                        } else if (@Model.drugSet.HighAlert== 4) {
+                            content = "人體臨床試驗藥品";
+                        }
+                        break;
+                    }
+                    case 'Pregnancy': {
+                        content = "@Model.drugSet.Pregnancy";
+                        break;
+                    }
+                    case 'NhiNorm': {
+                        content = "@Model.drugSet.NhiNorm";
+                        break;
+                    }
+                    case 'ExpireHourDesc': {
+                        content = "@Model.drugSet.ExpireHourDesc";
+                        break;
+                    }
+                    case 'Injection': {
+                        content = "@Model.drugSet.Injection";
+                        break;
+                    }
+                    case 'DrugImg': {
+                        content = "@Model.drugSet.DrugImg";
+                        break;
+                    }
+                    case 'DrugPkgImg': {
+                        content = "@Model.drugSet.DrugPkgImg";
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                $(this).html(content);
+                $("#DrugImg").attr("src", "@Model.drugSet.DrugImg");
+                $("#DrugPkgImg").attr("src", "@Model.drugSet.DrugPkgImg");
+            })
+        } else {
+            $(".drugInfo").each(function () {
+                $(this).html("");
+                $("#DrugImg").attr("src","");
+                $("#DrugPkgImg").attr("src", "");
+            })
+        }
+    }
+</script>
+<script>
+    /*function SwipeAjax() {
+
+        $.ajax({
+            url: 'Swipe',
+            cache: false,
+            type: 'POST',
+            data:
+                $("#go").serialize()
+            ,
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(textStatus);
+            },
+            success: function (a) {
+                var Adate = a.Date.toString();
+                var date = Adate.split(' ');
+                var AllPatientCount = a.AllPatientCount;
+                var lastPId = a.lastPId;
+                var nextPId = a.nextPId;
+                var PatientNum = a.PatientNum;
+                var UddData = a.UddData;
+
+
+                var nowDate = date[0].split('-');
+                var nowYear = parseInt(nowDate[0]);
+                var nowMonth = parseInt(nowDate[1]);
+
+                var patientDate = UddData.headler.Birthday.split('/');
+                var patientYear = parseInt(patientDate[0]);
+                var patientMonth = parseInt(patientDate[1]);
+                var Year;
+                var Month;
+                if (nowMonth > patientMonth) {
+                    Year = nowYear - patientYear;
+                    Month = nowMonth - patientMonth;
+                }
+                else {
+                    Year = nowYear - patientYear - 1;
+                    Month = 12 - patientMonth + nowMonth;
+                }
+
+                var patient_info_main_ajax = "<p>患者&nbsp;:&nbsp;" + UddData.headler.ChartNo + "&nbsp;" + UddData.headler.PtName + "&nbsp;" + UddData.headler.Sex + "&nbsp;" + UddData.headler.Birthday + "(" + Year + "歲" + Month + "個月 ) &nbsp;體重&nbsp;:&nbsp;" + UddData.headler.Weight + "</p>";
+                $(".patient_info_main").html(patient_info_main_ajax);
+
+                var patient_info_sec_ajax = '<p style="margin-bottom:10px;">床號&nbsp;:&nbsp;' + UddData.headler.Roombed + '&nbsp;科別&nbsp;:&nbsp;' + UddData.headler.Division + '&nbsp;主診斷&nbsp;:&nbsp;' + UddData.headler.ChtName + '</p>';
+                $(".patient_info_sec").html(patient_info_sec_ajax);
+
+                var patient_info_sec_open_ajax = '<p class="p_in_sec_open" style="color: #b70202;">';
+
+                if (UddData.headler.Allergy != "")
+                {
+                    patient_info_sec_open_ajax += "藥物過敏&nbsp:&nbsp" + Model.headler.Allergy;
+                }
+                patient_info_sec_open_ajax += '</p>< p class="p_in_sec_open" > ';
+                if (UddData.headler.LabReport != "")
+                {
+                    patient_info_sec_open_ajax += "檢查報告&nbsp:&nbsp" + UddData.headler.LabReport;
+                }
+                patient_info_sec_open_ajax += '</p>< p class="p_in_sec_open" > ';
+                if (UddData.headler.DoseModification != "")
+                {
+                    patient_info_sec_open_ajax +="劑量調整&nbsp:&nbsp" + UddData.headler.DoseModification;
+                }
+                patient_info_sec_open_ajax += '</p>< p class="p_in_sec_open" > ';
+                var i = 0;
+                var interatction;
+                UddData.interaction.forEach(function (interatction) {
+                    if (interatction.Significance != 0) {
+                        if (i == 0) {
+                            patient_info_sec_open_ajax += "交互作用&nbsp:&nbsp";
+                        }
+                        i++;
+                        patient_info_sec_open_ajax += interatction.ItemName1 + "&nbsp" + interatction.ItemName2 + "&nbsp[級數:" + interatction.Significance + "]&nbsp" + "&nbsp[機轉:" + interatction.Mechanism + "]&nbsp" + "&nbsp[管理:" + interatction.Management + "]<br>";
+                    }
+                })
+
+
+
+                patient_info_sec_open_ajax += '</p>';
+                //alert(patient_info_sec_open_ajax);
+                $(".patient_info_sec_open").html("");
+
+                $(".patient_info_sec_open").append(patient_info_sec_open_ajax);
+            }
+        });
+    }*/
+</script>
+@{/*
+                      if (ViewBag.PatientNum - 1 >= 2)
+                      {
+      <img src="~/image/gray.png" class="gray_circle" />
+      <img src="~/image/gray.png" class="gray_circle" />
+                      }
+                      else if (ViewBag.PatientNum - 1 == 1)
+                      {
+      <img src="~/image/gray.png" class="circle gray_circle" />
+                      }
+      <img src="~/image/white.png" class="circle white_circle" />
+                      if (ViewBag.AllPatientsNum - ViewBag.PatientNum >= 2)
+                      {
+      <img src="~/image/gray.png" class="gray_circle" />
+      <img src="~/image/gray.png" class="gray_circle" />
+                      }
+                      else if (ViewBag.AllPatientsNum - ViewBag.PatientNum == 1)
+                      {
+      <img src="~/image/gray.png" class="circle gray_circle" />
+                      }*/
+}

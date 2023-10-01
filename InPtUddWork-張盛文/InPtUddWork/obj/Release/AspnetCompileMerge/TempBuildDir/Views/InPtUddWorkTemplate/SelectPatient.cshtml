@@ -1,0 +1,210 @@
+﻿@model InPtUddWork.ViewModels.WardList
+
+@{
+    ViewBag.Title = "SelectPatient";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <link href="../Content/template/selectPatient.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header_div">
+            <img src="~/image/back.png" class="back_img" />
+            <p class="header_title">@Model.Ward 護理站</p>
+            <p class="header_sec_title">用藥期間&nbsp;:&nbsp;@Model.CycleTime </p>
+            <img src="~/image/menu.png" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="float:right;width:35px;" />
+            <div class="dropdown">
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width: 200px; font-size: 18px; font-weight: 500;">
+                    <li><a class="dropdown-item" href="#">回首頁</a></li>
+                    <li><a class="dropdown-item" href="SelectNursingStation">護理站</a></li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="search_bar">
+            <div class="search_img_div">
+                <img src="~/image/search.png" class="search_img" />
+            </div>
+            <div class="search_text_div">
+                <input class="search_text" id="search_input" type="text" placeholder=" Search" />
+            </div>
+            <div class="" style="width:20%;height:40px;">
+                <div style="float: right; display:flex; margin: auto;">
+                    <div style="width:40px;height:40px;background-color:antiquewhite;" id="line">
+                        條列
+                    </div>
+                    <div style="width: 40px; height: 40px; margin:0 10px; background-color: antiquewhite;" id="block">
+                        區塊
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="row body_content_PatientList">
+
+        @foreach (var pItem in Model.bed)
+        {
+            var bgcolor = "black";
+            if (@pItem.IsDC == "DC")
+            {
+                bgcolor = "red";
+            }
+            <div class="form_submit col-12 d-block_s d-sm-none_s">
+                <div class="patient_content">
+                    <form method="post">
+                        <input type="hidden" name="bedid" value="@pItem.RoomBed" />
+                    </form>
+                    <div class="wrapper">
+                        <div class="box1">
+                            <img src="@pItem.QRCode" class="QRImg" />
+                            <div class="patient">
+                                <p class="p_id">@pItem.ChartNo</p>
+                                <p class="p_name">@pItem.PtName</p>
+                            </div>
+                            <div class="p_block">
+                                <div class="float_right_block">
+                                    <div class="block1">
+                                        <p>@pItem.ChangeBed</p>
+                                        <p>@pItem.ChangeRoomBed</p>
+                                    </div>
+                                    <div class="block2">
+                                        <p>@pItem.ChangeBed</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="box2">
+                            <p class="search_p">@pItem.RoomBed</p>
+                        </div>
+                        <div class="box3">
+                            <span style="background-color:@bgcolor;">@pItem.IsDC</span>
+                            <span>@pItem.IsExpandRepair</span>
+                            <span>@pItem.IsFreezer</span>
+                            <span>@pItem.IsExpensive</span>
+                        </div>
+                        <div class="box4">
+                            <div class="box4_div">
+                                <div class="box4_mark">@pItem.CtrlDrug</div>
+                                <div class="box4_mark">@pItem.HighAlert</div>
+                            </div>
+                            <div class="box4_p_div">
+                                <p>07/14</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="form_submit col-sm-6 d-none_s d-sm-block_s">
+
+                <div class="patient_content_horiz">
+                    <form method="post">
+                        <input type="hidden" name="bedid" value="@pItem.RoomBed" />
+                    </form>
+                    <div class="wrapper_horiz">
+                        <div class="box1">
+                            <img src="@pItem.QRCode" class="QRImg_horiz" />
+                            <div class="patient">
+                                <span>
+                                    <p class="p_id">@pItem.ChartNo</p>
+                                    <p class="p_name">@pItem.PtName</p>
+                                </span>
+                            </div>
+                            <div class="p_block">
+                                <div class="float_right_block_horiz">
+                                    <div class="block1_horiz">
+                                        <p>@pItem.ChangeBed</p>
+                                        <p>@pItem.ChangeRoomBed</p>
+                                    </div>
+                                    <div class="block2_horiz">
+                                        <p>@pItem.ChangeBed</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="box2_horiz">
+                            <p class="search_p">@pItem.RoomBed</p>
+                        </div>
+                        <div class="box3_horiz">
+                            <span style="background-color:@bgcolor;">@pItem.IsDC</span>
+                            <span>@pItem.IsExpandRepair</span>
+                            <span>@pItem.IsFreezer</span>
+                            <span>@pItem.IsExpensive</span>
+                        </div>
+                        <div class="box4_horiz">
+                            <div class="box4_div_horiz">
+                                <div class="box4_mark_horiz">@pItem.CtrlDrug</div>
+                                <div class="box4_mark_horiz">@pItem.HighAlert</div>
+                            </div>
+                            <div class="box4_p_div_horiz">
+                                <p>@pItem.ExpandDate</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>
+
+<script>
+
+    $(".form_submit").click(function () {
+        $(this).find("form").submit();
+    })
+    $(".back_img").click(function () {
+        window.location.href = "SelectNursingStation";
+    })
+
+    $(document).ready(function () {
+        $("#search_input").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $(".form_submit").css("display", "none");
+            $(".search_p").filter(function () {
+
+                if (window.screen.width > 576) {
+                    if ($(this).text().toLowerCase().indexOf(value) > -1) {
+                        block = true;
+                        $(this).parent().parent().parent().parent(".col-sm-6").css("display", "block");
+                    }
+                } else {
+                    if ($(this).text().toLowerCase().indexOf(value) > -1) {
+                        $(this).parent().parent().parent().parent(".col-12").css("display","block");
+                    }
+                }
+            });
+
+            $(".p_id, .p_name").filter(function () {
+                if (window.screen.width > 576) {
+                    if ($(this).text().toLowerCase().indexOf(value) > -1) {
+                        $(this).parent().parent().parent().parent().parent().parent(".col-sm-6").css("display", "block");
+                    }
+                } else {
+                    if ($(this).text().toLowerCase().indexOf(value) > -1) {
+                        $(this).parent().parent().parent().parent().parent().parent(".col-12").css("display", "block");
+                    }
+                }
+            });
+        });
+    });
+</script>

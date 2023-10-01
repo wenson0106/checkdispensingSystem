@@ -1,0 +1,379 @@
+﻿
+html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.QRImg {
+    margin: 15px;
+    width: 70px;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.body_content_PatientList {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.patient_content {
+    margin-bottom: 20px;
+}
+
+.d-none_s {
+    display: none;
+}
+
+.d-block_s {
+    display: block;
+}
+
+@media screen and (min-width: 576px) {
+    .d-sm-block_s {
+        display: block;
+    }
+}
+
+@media screen and (min-width: 576px) {
+    .d-sm-none_s {
+        display: none;
+    }
+}
+
+.patient {
+    height: 100%;
+    width: 70%;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    color: white;
+    text-align: left;
+}
+
+.p_id {
+    font-size: 0.9em;
+    font-weight: 900;
+}
+
+.p_name {
+    font-size: 1.4em;
+    font-weight: 900;
+}
+
+form {
+    margin: 0;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 40px;
+    width: 100%;
+}
+
+.box1 {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    background-color: black;
+    color: white;
+    text-align: right;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.p_block {
+    width: 100%;
+    height: 100%;
+}
+
+.float_right_block {
+    float: right;
+    display: flex;
+    width: 80%;
+    padding: 5px;
+    height: 70px;
+}
+
+.block1 {
+    /*border: 3px solid white;*/
+    text-align: center;
+    font-size: 1.3em;
+    color: white;
+    width: 45%;
+    height: calc(100% - 40px);
+    margin-right: 10px;
+}
+
+.block2 {
+    /*border: 3px solid white;*/
+    text-align: center;
+    font-size: 2em;
+    color: white;
+    width: 45%;
+    height: calc(100% - 40px);
+}
+
+.box2 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 6;
+    text-align: center;
+    font-size: 4em;
+}
+
+.box3 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 6;
+    grid-row-end: 7;
+    background-color: black;
+    color: white;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+    .box3 span {
+        /*border: 3px solid white;*/
+        text-align: center;
+        margin: 10px;
+        padding: 0 5px;
+        font-size: 1.1em;
+        height: 70%;
+        width: 65px;
+    }
+
+.box4 {
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 7;
+    background-color: red;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.box4_div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60%;
+    justify-content: center;
+}
+
+.box4_mark {
+    /*border: 3px solid white;*/
+    text-align: center;
+    font-size: 3.2em;
+    height: 90%;
+    width: 40%;
+    padding: 0 8px;
+    margin: 5px;
+}
+
+.box4 .box4_p_div {
+    width: 100%;
+    font-size: 1.6em;
+    text-align: center;
+}
+
+.form_submit {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #ddd;
+}
+
+.header_title {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-weight: bold;
+    display: inline;
+    font-size: 24px;
+}
+
+.header_sec_title {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-weight: normal;
+    font-size: 14px;
+    display: inline;
+}
+
+.back_img {
+    float: left;
+    width: 30px;
+}
+
+.patient_content_horiz {
+    margin: 10px;
+}
+
+.wrapper_horiz {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 35px;
+    width: 100%;
+    box-shadow: 6px 6px 6px rgb(0 0 0 / 30%);
+}
+
+.QRImg_horiz {
+    margin: 10px;
+    width: 60px;
+}
+
+
+.header_div {
+    margin: 0;
+    padding: 10px;
+    background-color: #31662e;
+    text-align: center;
+}
+
+.search_bar {
+    width: 100%;
+    background: white;
+    text-align: center;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.search_text {
+    height: 40px;
+    border-radius: 2px;
+    border: solid 0.1px;
+    width: 100%;
+}
+
+.search_text_div {
+    width: 60%;
+    padding: 5px 0;
+}
+
+.search_img {
+    width: 50px;
+    float: right;
+    margin-right: 5px;
+}
+
+.search_img_div {
+    width: 20%;
+}
+
+.float_right_block_horiz {
+    float: right;
+    display: flex;
+    width: 50%;
+    padding: 10px;
+    height: 90px;
+}
+
+.block1_horiz {
+    /*border: 3px solid white;*/
+    text-align: center;
+    font-size: 1.15em;
+    color: white;
+    width: 50%;
+    height: calc(100% - 20px);
+    margin-right: 10px;
+}
+
+.block2_horiz {
+    /*border: 3px solid white;*/
+    text-align: center;
+    font-size: 2.3em;
+    color: white;
+    width: 50%;
+    height: calc(100% - 20px);
+}
+
+.box2_horiz {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 6;
+    text-align: center;
+    font-size: 4.2em;
+}
+
+
+.box3_horiz {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 6;
+    grid-row-end: 7;
+    background-color: black;
+    color: white;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+    .box3_horiz span {
+        /*border: 3px solid white;*/
+        text-align: center;
+        margin: 5px;
+        padding: 0 5px;
+        font-size: 1em;
+        height: 70%;
+        width: 40px;
+    }
+
+.box4_horiz {
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 7;
+    background-color: red;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.box4_div_horiz {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60%;
+    justify-content: center;
+}
+
+.box4_mark_horiz {
+    /*border: 3px solid white;*/
+    text-align: center;
+    font-size: 3em;
+    padding: 0 4px;
+    margin: 5px;
+    height: 80%;
+    width: 40%;
+}
+
+.box4_horiz .box4_p_div_horiz {
+    width: 100%;
+    font-size: 1.5em;
+    text-align: center;
+}

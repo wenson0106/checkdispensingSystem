@@ -1,0 +1,211 @@
+﻿@model IEnumerable<InPtUddWork.Models.Ward>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width" />
+    <title>SelectNursingStation</title>
+</head>
+<body>
+    <header>
+        <div class="header_div">
+            <img src="~/image/back.png" class="back_img" />
+            <p class="header_title">選擇護理站</p>
+            <img src="~/image/menu.png" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="float:right;width:35px;" />
+            <div class="dropdown">
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="width: 200px; font-size: 18px; font-weight: 500;">
+                    <li><a class="dropdown-item" href="#">回首頁</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search_bar">
+            <img src="~/image/search.png" class="search_img" /><input class="search_text" id="search_input" type="text" placeholder=" Search" />
+        </div>
+    </header>
+    <div>
+        <div class="body_container">
+
+            <div class="row">
+                @{ var b = "";}
+                @foreach (var item in Model.OrderBy(item => item.building))
+                {
+                    if (item.building != b)
+                    {
+                        b = item.building;
+                        <div class="building_font">@item.building</div>
+                    }
+
+                    <div class="form_submit nursing_station_card col-12 col-sm-6 col-lg-4">
+                        <div class="card_content">
+                            <form method="post">
+                                <input type="hidden" name="wardId" value="@item.ward" />
+                            </form>
+                            <div class="finist_stage">
+                                <!--這裡之後要加護理站檢藥完成狀況-->
+                                <img src="~/image/b.png" class="stage_img" /><p class="stage_font">完成交車</p>
+                            </div>
+                            <div class="card_info">
+                                <p class="ward_font">@item.ward</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>
+<style>
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background-color: #ddd;
+    }
+
+    .header_title {
+        margin: 0;
+        padding: 0;
+        color: white;
+        font-weight: bold;
+        display: inline;
+        font-size: 24px;
+    }
+
+    .header_sec_title {
+        margin: 0;
+        padding: 0;
+        color: white;
+        font-weight: normal;
+        font-size: 14px;
+        display: inline;
+    }
+
+    .back_img {
+        float: left;
+        width: 30px;
+    }
+
+    .header_div {
+        margin: 0;
+        padding: 10px;
+        background-color: #31662e;
+        text-align: center;
+    }
+
+    .search_bar {
+        width: 100%;
+        background: white;
+        text-align: center;
+        z-index: 1;
+        margin: 0;
+        padding: 0;
+    }
+
+    .search_text {
+        height: 40px;
+        border-radius: 2px;
+        border: solid 0.1px;
+        margin: 5px;
+        width: 85%;
+    }
+
+    .search_img {
+        width: 30px;
+        display: inline;
+    }
+
+    .body_container {
+        width: calc(100% - 30px);
+        margin: 15px;
+    }
+
+    .nursing_station_card {
+        height: 100px;
+        padding: 5px;
+        margin: 0;
+    }
+
+    .row {
+        margin: 0;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    .card_content {
+        background-color: #ddd;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        border-radius: 5px;
+    }
+
+    .finist_stage {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .card_info {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .stage_img {
+        width: 40px;
+        height: 40px;
+        display: inline;
+    }
+
+    .stage_font {
+        display: inline;
+        font-size: 24px;
+        font-weight: 900;
+    }
+
+    .ward_font {
+        font-size: 36px;
+        font-weight: 900;
+    }
+
+    .building_font {
+        font-size: 23px;
+        font-weight: 800;
+    }
+</style>
+
+<script>
+    $(".form_submit").click(function () {
+        $(this).find("form").submit();
+    })
+
+    $(document).ready(function () {
+        $("#search_input").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $(".form_submit").css("display", "none");
+
+            $(".ward_font").filter(function () {
+                if ($(this).text().toLowerCase().indexOf(value) > -1) {
+                    $(this).parent().parent().parent().css("display", "block");
+                }
+            });
+        });
+    });
+</script>
